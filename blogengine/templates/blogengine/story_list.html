@@ -1,0 +1,23 @@
+<html>
+
+    <head>
+
+        <title>My Django Blog</title>
+
+    </head>
+
+    <body>
+
+        {% for story in object_list %}
+
+        <h1>{{ story.title }}</h1>
+
+        <h3>{{ story.pub_date }}</h3>
+
+        {{ story.text }}
+
+        {% endfor %}
+
+    </body>
+
+</html>
