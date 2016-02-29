@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
 from blogengine.models import Story
 
@@ -32,6 +32,29 @@ class StoryPostTest(TestCase):
         self.assertEqual(only_story.pub_date.minute, story.pub_date.minute)
         self.assertEqual(only_story.pub_date.second, story.pub_date.second)
         
+class AdminTest(LiveServerTestCase):
+    def test_login(self):
+        # Create Client
+        c = Client()
         
+        # Get Login page
+        response = c.get('/admin/')
+        
+        # Check response code
+        self.assertEqual(response.status_code, 200)
+        
+        #self.assertTrue('Log in' in response.content)
+        
+        c.login(username='ah3200',password='password2604')
+         # Check response code
+        response = c.get('/admin/')
+        self.assertEqual(response.status_code, 200)
+        
+    def test_create_story(self):
+        self.client.login(username='ah3200',password='password2604')
+        
+        # Check response code
+        response = self.client.get('/admin/blogengine/story/add/')
+        self.assertEquals(response.status_code, 200)
         
         
