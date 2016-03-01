@@ -75,7 +75,7 @@ class StoryViewTest(LiveServerTestCase):
      
         # Fetch index
         response = self.client.get('/')
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 400)
         
         self.assertTrue(story.title in response.content)
         self.assertTrue(story.text in response.content)
