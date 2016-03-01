@@ -121,3 +121,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+INSTALLED_APPS += ('django_jenkins',)
+
+JENKINS_TASKS = (
+
+    'django_jenkins.tasks.run_pylint',
+    
+)
+
+PROJECT_APPS = ['blogengine']
