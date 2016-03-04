@@ -3,3 +3,4 @@ db.sqlite3
 .coverage
 reports/
 htmlcov/
+blogengine/static/bower_components/

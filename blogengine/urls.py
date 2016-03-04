@@ -3,5 +3,5 @@ from django.views.generic import ListView
 from blogengine.models import Story
 
 urlpatterns = [
-    url(r'^$', ListView.as_view(model=Story)),
+    url(r'story$', ListView.as_view(model=Story)),
     ]
