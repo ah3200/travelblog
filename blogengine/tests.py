@@ -1,6 +1,7 @@
 from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
 from blogengine.models import Story
+import markdown
 
 # Create your tests here.
 class StoryPostTest(TestCase):
@@ -65,7 +66,7 @@ class StoryViewTest(LiveServerTestCase):
         #Create Story
         story = Story()
         story.title = "My very first blog post"
-        story.text = "This is my first blog post online"
+        story.text = "This is [my first blog post](http://127.0.0.1:8000/)"
         story.pub_date = timezone.now()
         
         story.save()
@@ -74,13 +75,22 @@ class StoryViewTest(LiveServerTestCase):
         self.assertEqual(len(all_stories), 1)
      
         # Fetch index
-        response = self.client.get('/')
+    #    response = self.client.get('/')
+    #    self.assertEquals(response.status_code, 200)
+        
+        response = self.client.get('/story')
         self.assertEquals(response.status_code, 200)
         
         self.assertTrue(story.title in response.content)
-        self.assertTrue(story.text in response.content)
+        
+        # Check the post text is in the response
+        self.assertTrue(markdown.markdown(story.text) in response.content)
+        #self.assertTrue(story.text in response.content)
         
          # Check the post date is in the response
         self.assertTrue(str(story.pub_date.year) in response.content)
         self.assertTrue(story.pub_date.strftime('%b') in response.content)
         self.assertTrue(str(story.pub_date.day) in response.content)
+        
+        # Check the link is marked up properly
+        self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
