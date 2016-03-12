@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blogengine',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -133,3 +135,5 @@ JENKINS_TASKS = (
 )
 
 PROJECT_APPS = ['blogengine']
+
+SITE_ID = 1
