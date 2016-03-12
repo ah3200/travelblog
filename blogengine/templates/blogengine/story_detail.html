@@ -1,0 +1,17 @@
+{% extends "blogengine/includes/base.html" %}
+
+    {% load custom_markdown %}
+
+    {% block content %}
+
+        <div class="story">
+
+        <h1>{{ object.title }}</h1>
+
+        <h3>{{ object.pub_date }}</h3>
+
+        {{ object.text|custom_markdown }}
+
+        </div>
+
+{% endblock %}

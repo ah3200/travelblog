@@ -78,7 +78,7 @@ class StoryViewTest(LiveServerTestCase):
     #    response = self.client.get('/')
     #    self.assertEquals(response.status_code, 200)
         
-        response = self.client.get('/story')
+        response = self.client.get('/story/')
         self.assertEquals(response.status_code, 200)
         
         self.assertTrue(story.title in response.content)
@@ -94,3 +94,32 @@ class StoryViewTest(LiveServerTestCase):
         
         # Check the link is marked up properly
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
+    def test_post_page(self):
+        #Create story
+        story = Story()
+        story.title = "My first story"
+        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        story.pub_date = timezone.now()
+        story.slug = 'my-first-story'
+        story.save()
+        
+        all_stories = Story.objects.all()
+        self.assertEquals(len(all_stories),1)
+        only_story = all_stories[0]
+        self.assertEquals(only_story, story)
+        print only_story.slug
+        
+        story_url = '/story/'+only_story.get_absolute_url()
+        print story_url
+        response = self.client.get(story_url)
+        self.assertEquals(response.status_code, 200)
+        
+        self.assertTrue(markdown.markdown(story.text) in response.content)
+        
+        self.assertTrue(str(story.pub_date.year) in response.content)
+        self.assertTrue(story.pub_date.strftime('%b') in response.content)
+        self.assertTrue(str(story.pub_date.day) in response.content)
+        
+        self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
