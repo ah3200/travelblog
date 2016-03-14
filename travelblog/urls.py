@@ -21,5 +21,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', admin.site.urls),
     url(r'^story/', include('blogengine.urls')),
-    url(r'^',include('django.contrib.flatpages.urls')),
+    url(r'',include('django.contrib.flatpages.urls')),
 )
