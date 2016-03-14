@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.contrib.syndication.views import Feed
 from blogengine.models import Category, Story
 
 # Create your views here.
@@ -20,3 +21,17 @@ class TagListView(ListView):
             return tag.post_set.all()
         except:
             return Story.objects.none()
+            
+class StoriesFeed(Feed):
+    title = "RSS Feed - stories"
+    link = "feeds/stories/"
+    description = "RSS feed - blog post"
+    
+    def items(self):
+        return Story.objects.order_by('-pub_date')
+        
+    def item_title(self, item):
+        return item.title
+        
+    def item_description(self, item):
+        return item.text

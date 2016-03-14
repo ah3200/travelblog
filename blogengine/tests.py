@@ -5,8 +5,13 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 import markdown
+import feedparser
 
 # Create your tests here.
+class BaseAcceptanceTest(LiveServerTestCase):
+    def setUp(self):
+        self.client = Client()
+
 class StoryPostTest(TestCase):
     
     def test_create_category(self):
@@ -605,3 +610,60 @@ class FlatPageViewTest(TestCase):
         # Check title and content in response
         self.assertTrue('About me' in response.content)
         self.assertTrue('All about me' in response.content)
+
+class FeedTest(BaseAcceptanceTest):
+    def test_all_story_feed(self):
+        #Create the category
+        category = Category()
+        category.name = 'python'
+        category.description = 'The Python programming language'
+        category.save()
+        
+        #Create the tag
+        tag = Tag()
+        tag.name = 'perl'
+        tag.description = 'The Perl programming language'
+        tag.save()
+        
+        #Create author
+        author = User.objects.create_user('testuser','user@example.com','password')
+        author.save()
+        
+        #Create the site
+        site = Site()
+        site.name = 'arnnop.com'
+        site.domain = 'arnnop.com'
+        site.save()
+        
+        #Create story
+        story = Story()
+        story.title = "My first story"
+        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        story.pub_date = timezone.now()
+        story.slug = 'my-first-story'
+        story.author = author
+        story.site = site
+        story.category = category
+        story.save()
+        story.tags.add(tag)
+        story.save()
+        
+        all_stories = Story.objects.all()
+        self.assertEquals(len(all_stories),1)
+        only_story = all_stories[0]
+        self.assertEquals(only_story,story)
+        
+        # Fetch the feed
+        response = self.client.get("/feeds/stories/")
+        self.assertEquals(response.status_code,200)
+        
+        # Parse the feed
+        feed = feedparser.parse(response.content)
+        
+        # Check length
+        self.assertEquals(len(feed.entries),1)
+        
+        # Check story retrieve is the correct one
+        story_feed = feed.entries[0]
+        self.assertEquals(story_feed.title, story.title)
+        self.assertEquals(story_feed.description, story.text)
