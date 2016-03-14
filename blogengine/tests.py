@@ -1,6 +1,6 @@
 from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
-from blogengine.models import Story, Category
+from blogengine.models import Story, Category, Tag
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
@@ -29,10 +29,34 @@ class StoryPostTest(TestCase):
         self.assertEqual(only_category.name, 'python')
         self.assertEqual(only_category.description, 'The Python programming language')
     
-   # def test_create_tag(self):
+    def test_create_tag(self):
+        # Create the tag
+        tag = Tag()
         
+        # add attribute
+        tag.name = 'python'
+        tag.description = 'The Python programming language'
+        
+        tag.save()
+        
+        # Check
+        all_tags = Tag.objects.all()
+        only_tag = all_tags[0]
+        self.assertEquals(len(all_tags),1)
+        self.assertEquals(only_tag, tag)
+        
+        # Check attributes
+        self.assertEquals(only_tag.name, 'python')
+        self.assertEquals(only_tag.description, 'The Python programming language')
     
     def test_create_story(self):
+        
+        # Create the tag
+        tag = Tag()
+        # add attribute
+        tag.name = 'python'
+        tag.description = 'The Python programming language'
+        tag.save()
         
         #Create category
         category = Category()
@@ -65,6 +89,10 @@ class StoryPostTest(TestCase):
         #Save it
         story.save()
         
+        #add the tag
+        story.tags.add(tag)
+        story.save()
+        
         #Test
         all_stories = Story.objects.all()
         self.assertEqual(len(all_stories), 1)
@@ -84,6 +112,14 @@ class StoryPostTest(TestCase):
         self.assertEqual(only_story.author.email, 'user@example.com')
         self.assertEqual(only_story.category.name, 'python')
         self.assertEqual(only_story.category.description, 'The Python programming language')
+        
+        #Check tag in story
+        story_tags = only_story.tags.all()
+        self.assertEquals(len(story_tags),1)
+        only_story_tag = story_tags[0]
+        self.assertEquals(only_story_tag, tag)
+        self.assertEquals(only_story_tag.name, 'python')
+        self.assertEquals(only_story_tag.description, 'The Python programming language')
         
 class AdminTest(LiveServerTestCase):
     def test_login(self):
