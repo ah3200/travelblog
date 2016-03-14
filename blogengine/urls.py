@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import ListView, DetailView
 from blogengine.models import Story, Category
-from blogengine.views import CategoryListView
+from blogengine.views import CategoryListView, TagListView
 
 urlpatterns = [
     url(r'^story/(?P<page>\d+)?/?$', ListView.as_view(model=Story, paginate_by=2)),
@@ -9,4 +9,5 @@ urlpatterns = [
         model=Story,
         )),
     url(r'^category/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', CategoryListView.as_view(model=Category, paginate_by=2)),
+    url(r'^tag/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', CategoryListView.as_view(model=Category, paginate_by=2)),
     ]

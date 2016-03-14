@@ -9,6 +9,9 @@
             <h3>{{ object.pub_date }}</h3>
             {{ object.text|custom_markdown }}
             <a href="{{object.category.get_absolute_url}}">{{object.category.name}}</a>
+            {% for tag in story.tags.all %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+            {% endfor %}
         </div>
 
 {% endblock %}

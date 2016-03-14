@@ -360,6 +360,12 @@ class StoryViewTest(LiveServerTestCase):
         category.description = 'The Python programming language'
         category.save()
         
+        #Create the tag
+        tag = Tag()
+        tag.name = 'perl'
+        tag.description = 'The Perl programming language'
+        tag.save()
+        
         #Create author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
@@ -382,6 +388,10 @@ class StoryViewTest(LiveServerTestCase):
         
         story.save()
         
+        #Add tag
+        story.tags.add(tag)
+        story.save()
+        
         all_stories = Story.objects.all()
         self.assertEqual(len(all_stories), 1)
      
@@ -399,6 +409,10 @@ class StoryViewTest(LiveServerTestCase):
         #self.assertTrue(story.text in response.content)
         self.assertTrue(story.category.name in response.content)
         
+        # Check the tag is in the content response
+        story_tag = all_stories[0].tags.all()[0]
+        self.assertTrue(story_tag.name in response.content)
+        
          # Check the post date is in the response
         self.assertTrue(str(story.pub_date.year) in response.content)
         self.assertTrue(story.pub_date.strftime('%b') in response.content)
@@ -413,6 +427,12 @@ class StoryViewTest(LiveServerTestCase):
         category.name = 'python'
         category.description = 'The Python programming language'
         category.save()
+        
+        #Create the tag
+        tag = Tag()
+        tag.name = 'perl'
+        tag.description = 'The Perl programming language'
+        tag.save()
         
         #Create author
         author = User.objects.create_user('testuser','user@example.com','password')
@@ -434,6 +454,8 @@ class StoryViewTest(LiveServerTestCase):
         story.site = site
         story.category = category
         story.save()
+        story.tags.add(tag)
+        story.save()
         
         all_stories = Story.objects.all()
         self.assertEquals(len(all_stories),1)
@@ -449,6 +471,10 @@ class StoryViewTest(LiveServerTestCase):
         self.assertTrue(markdown.markdown(story.text) in response.content)
         
         self.assertTrue(story.category.name in response.content)
+        
+         # Check the tag is in the content response
+        story_tag = all_stories[0].tags.all()[0]
+        self.assertTrue(story_tag.name in response.content)
         
         self.assertTrue(str(story.pub_date.year) in response.content)
         self.assertTrue(story.pub_date.strftime('%b') in response.content)
@@ -496,6 +522,54 @@ class StoryViewTest(LiveServerTestCase):
         
         #Check the category name is in the response content
         self.assertTrue(story.category.name in response.content)
+        
+        self.assertTrue(markdown.markdown(story.text) in response.content)
+        self.assertTrue(str(story.pub_date.year) in response.content)
+        self.assertTrue(story.pub_date.strftime('%b') in response.content)
+        self.assertTrue(str(story.pub_date.day) in response.content)
+        self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+
+def test_tag_page(self):
+         #Create the tag
+        tag = Tag()
+        tag.name = 'perl'
+        tag.description = 'The Perl programming language'
+        tag.save()
+        
+        author = User.objects.create_user('testuser','test@example.com','password')
+        author.save()
+        
+        site = Site()
+        site.name = 'arnnop.com'
+        site.domain = 'arnnop.com'
+        site.save()
+        
+        #Create story
+        story = Story()
+        story.title = "My first story"
+        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        story.pub_date = timezone.now()
+        story.slug = 'my-first-story'
+        story.author = author
+        story.site = site
+        story.save()
+        story.tags.add(tag)
+        story.save()
+        
+        all_stories = Story.objects.all()
+        self.assertEquals(len(all_stories),1)
+        only_story = all_stories[0]
+        self.assertEquals(only_story,story)
+        
+        #Get tag url
+        tag_url = story.tags.all()[0].get_absolute_url()
+        
+        #Fetch the category
+        response = self.client.get(tagy_url)
+        self.assertEquals(response.status_code, 200)
+        
+        #Check the category name is in the response content
+        self.assertTrue(story.tags.all()[0].name in response.content)
         
         self.assertTrue(markdown.markdown(story.text) in response.content)
         self.assertTrue(str(story.pub_date.year) in response.content)
