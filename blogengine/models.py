@@ -31,4 +31,5 @@ class Story(models.Model):
         return self.title
 
     class Meta:
+        verbose_name_plural = 'stories'
         ordering = ["-pub_date"]
