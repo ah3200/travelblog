@@ -18,8 +18,8 @@ from django.conf.urls import url, include, patterns
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^story/', include('blogengine.urls')),
+    url(r'', include('blogengine.urls')),
     url(r'',include('django.contrib.flatpages.urls')),
-)
+]

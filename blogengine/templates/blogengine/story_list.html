@@ -5,19 +5,19 @@
     {% block content %}
         {% for story in object_list %}
         <div class="story">
-            <h1><a href="/story/{{ story.get_absolute_url }}">{{ story.title }}</a></h1>
+            <h1><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h1>
             <h3>{{ story.pub_date }}</h3>
             {{ story.text|custom_markdown }}
         </div>
-    
+        <a href="{{story.category.get_absolute_url}}">{{story.category.name}}</a>
         {% endfor %}
         
         {% if page_obj.has_previous %}
-        <a href="/story/{{ page_obj.previous_page_number }}/">Previous Page</a>
+        <a href="{{ page_obj.previous_page_number }}">Previous Page</a>
         {% endif %}
 
         {% if page_obj.has_next %}
-        <a href="/story/{{ page_obj.next_page_number }}/">Next Page</a>
+        <a href="{{ page_obj.next_page_number }}">Next Page</a>
         {% endif %}
         
     {% endblock %}
