@@ -507,6 +507,9 @@ class StoryViewTest(LiveServerTestCase):
         # Check the link is marked up properly
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
         
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/story_list.html')
+        
     def test_post_page(self):
         #Create the category
         category = CategoryFactory()
@@ -574,6 +577,9 @@ class StoryViewTest(LiveServerTestCase):
         
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
         
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/story_detail.html')
+        
     def test_category_page(self):
         #create the category
         category = CategoryFactory()
@@ -624,6 +630,9 @@ class StoryViewTest(LiveServerTestCase):
         self.assertTrue(story.pub_date.strftime('%b') in response.content)
         self.assertTrue(str(story.pub_date.day) in response.content)
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/category_story_list.html')
 
 def test_tag_page(self):
          #Create the tag

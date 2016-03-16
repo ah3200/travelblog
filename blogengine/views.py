@@ -8,6 +8,9 @@ import markdown2
 
 # Create your views here.
 class CategoryListView(ListView):
+    
+    template_name = 'blogengine/category_story_list.html'
+    
     def get_queryset(self):
         slug = self.kwargs['slug']
         try:
@@ -15,7 +18,16 @@ class CategoryListView(ListView):
             return Story.objects.filter(category=category)
         except Category.DoesNotExist:
             return Story.objects.none()
-            
+    
+    def get_context_data(self, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        try:
+            context['category'] = Category.objects.get(slug=slug)
+        except Category.DoesNotExist:
+            context['category'] = None
+        return context
+    
 class TagListView(ListView):
     def get_queryset(self):
         slug = self.kwargs['slug']
