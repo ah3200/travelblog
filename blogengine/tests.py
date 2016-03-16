@@ -768,3 +768,29 @@ class FeedTest(BaseAcceptanceTest):
         story_feed = feed.entries[0]
         self.assertEquals(story_feed.title, story.title)
         self.assertTrue('This is my <em>first</em> blog post' in story_feed.description)
+    
+    def test_category_feed(self):
+        # Create a story
+        story = StoryFactory(text='This is my *first* blog post')
+        
+        # Create another story with different story
+        category = CategoryFactory(name='perl', description='The Perl programming language', slug='perl')
+        story2 = StoryFactory(text='This is my *second* blog post', title='My second post', slug='my-second-post', category=category)
+        
+        #Fetch the feed
+        response = self.client.get("/feeds/stories/category/python")
+        self.assertEquals(response.status_code,200)
+        
+        # Parse the feed
+        feed = feedparser.parse(response.content)
+        
+        #Check length 
+        self.assertEquals(len(feed.entries),1)
+        
+        # Check story retrieve is the correct one
+        story_feed = feed.entries[0]
+        self.assertEquals(story_feed.title, story.title)
+        self.assertTrue('This is my <em>first</em> blog post' in story_feed.description)
+    
+        # Check other post is not in this feed
+        self.assertTrue('This is my <em>second</em> blog post' not in response.content)
