@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.contrib.syndication.views import Feed
-from blogengine.models import Category, Story
+from blogengine.models import Category, Story, Tag
+from django.utils.encoding import force_unicode
+from django.utils.safestring import mark_safe
+import markdown2
 
 # Create your views here.
 class CategoryListView(ListView):
@@ -34,4 +37,6 @@ class StoriesFeed(Feed):
         return item.title
         
     def item_description(self, item):
-        return item.text
+        extras = ["fenced-code-blocks"]
+        content = mark_safe(markdown2.markdown(force_unicode(item.text), extras=extras))
+        return content

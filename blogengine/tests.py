@@ -638,7 +638,7 @@ class FeedTest(BaseAcceptanceTest):
         #Create story
         story = Story()
         story.title = "My first story"
-        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        story.text = 'This is my *first* blog post'
         story.pub_date = timezone.now()
         story.slug = 'my-first-story'
         story.author = author
@@ -666,4 +666,4 @@ class FeedTest(BaseAcceptanceTest):
         # Check story retrieve is the correct one
         story_feed = feed.entries[0]
         self.assertEquals(story_feed.title, story.title)
-        self.assertEquals(story_feed.description, story.text)
+        self.assertTrue('This is my <em>first</em> blog post' in story_feed.description)
