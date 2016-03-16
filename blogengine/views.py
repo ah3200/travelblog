@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Q
 from django.views.generic import ListView
 from django.contrib.syndication.views import Feed
 from blogengine.models import Category, Story, Tag
@@ -97,4 +99,31 @@ class TagStoriesFeed(StoriesFeed):
             return tag.story_set.all()
         except Tag.DoesNotExist:
             return Story.objects.none()
- 
+
+def getSearchResults(request):
+    # Get query data
+    query = request.GET.get('q','')
+    page = request.GET.get('page',1)
+    
+    # Query the database
+    if query:
+        results = Story.objects.filter(Q(text__icontains=query) | Q(title__icontains=query))
+    else:
+        results = None
+    
+     # Add pagination
+    pages = Paginator(results, 2)
+    
+    # Get specified page
+    try:
+        returned_page = pages.page(page)
+    except EmptyPage:
+        returned_page = pages.page(pages.num_pages)
+        
+    # Display the search results
+    return render_to_response('blogengine/search_story_list.html',
+                             {'page_obj': returned_page,
+                              'object_list': returned_page.object_list,
+                              'search': query})
+                               
+    

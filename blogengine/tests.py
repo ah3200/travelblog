@@ -837,4 +837,32 @@ class FeedTest(BaseAcceptanceTest):
     
         # Check other post is not in this feed
         self.assertTrue('This is my <em>second</em> blog post' not in response.content)
+
+class SearchViewTest(BaseAcceptanceTest):
+    
+    def test_search(self):
+        # Create a story
+        story = StoryFactory()
         
+        # Create another story
+        story2 = StoryFactory(text='This is my *second* blog post', title='My second post', slug='my-second-post')
+        
+        # Search for first post
+        response = self.client.get('/search?q=first')
+        self.assertEquals(response.status_code, 200)
+        
+        # Check the first post is contained in the results
+        self.assertTrue('My first blog' in response.content)
+        
+        # Check the second post is not in the result
+        self.assertTrue('My second post' not in response.content)
+        
+        # Search for second post
+        response = self.client.get('/search?q=second')
+        self.assertEquals(response.status_code, 200)
+        
+        # Check the first post is notin the results
+        self.assertTrue('My first blog' not in response.content)
+        
+        # Check the second post is in the result
+        self.assertTrue('My second post' in response.content)
