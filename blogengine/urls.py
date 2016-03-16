@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.views.generic import ListView, DetailView
-from blogengine.models import Story, Category
+from blogengine.models import Story, Category, Tag
 from blogengine.views import CategoryListView, TagListView, StoriesFeed, CategoryStoriesFeed, TagStoriesFeed
 
 urlpatterns = [
@@ -9,7 +9,7 @@ urlpatterns = [
         model=Story,
         )),
     url(r'^category/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', CategoryListView.as_view(model=Category, paginate_by=2)),
-    url(r'^tag/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', CategoryListView.as_view(model=Category, paginate_by=2)),
+    url(r'^tag/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', TagListView.as_view(model=Tag, paginate_by=2)),
     # Post RSS feed
     url(r'^feeds/stories/$', StoriesFeed()),
     # Category RSS feed
