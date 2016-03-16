@@ -6,8 +6,43 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 import markdown
 import feedparser
+import factory.django
 
 # Create your tests here.
+class SiteFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Site
+        django_get_or_create = (
+            'name',
+            'domain'
+        )
+    name = 'arnnop.com'
+    domain = 'arnnop.com'
+
+class CategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Category
+        django_get_or_create = (
+            'name',
+            'description',
+            'slug'
+        )
+    name = 'python'
+    description = 'The Python programming language'
+    slug = 'python'
+
+class TagFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Tag
+        django_get_or_create = (
+            'name',
+            'description',
+            'slug',
+        )
+    name = 'python'
+    description = 'The Python programming language'
+    slug = 'python'
+
 class BaseAcceptanceTest(LiveServerTestCase):
     def setUp(self):
         self.client = Client()
@@ -16,14 +51,13 @@ class StoryPostTest(TestCase):
     
     def test_create_category(self):
         #create Category
-        category = Category()
-        
+        category = CategoryFactory()
+        #category = Category()
         #add attribute
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
         #save it
-        category.save()
+        #category.save()
         
         #Test
         all_categories = Category.objects.all()
@@ -36,13 +70,12 @@ class StoryPostTest(TestCase):
     
     def test_create_tag(self):
         # Create the tag
-        tag = Tag()
-        
+        tag = TagFactory()
+        #tag = Tag()
         # add attribute
-        tag.name = 'python'
-        tag.description = 'The Python programming language'
-        
-        tag.save()
+        #tag.name = 'python'
+        #tag.description = 'The Python programming language'
+        #tag.save()
         
         # Check
         all_tags = Tag.objects.all()
@@ -57,27 +90,30 @@ class StoryPostTest(TestCase):
     def test_create_story(self):
         
         # Create the tag
-        tag = Tag()
+        tag = TagFactory()
+        #tag = Tag()
         # add attribute
-        tag.name = 'python'
-        tag.description = 'The Python programming language'
-        tag.save()
+        #tag.name = 'python'
+        #tag.description = 'The Python programming language'
+        #tag.save()
         
         #Create category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         #Create user/author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
         
         #Create Site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create new story
         story = Story()
@@ -168,10 +204,11 @@ class AdminTest(LiveServerTestCase):
         
     def test_edit_category(self):
         #Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         # Log in
         self.client.login(username='ah3200',password='password26')
@@ -195,10 +232,11 @@ class AdminTest(LiveServerTestCase):
     
     def test_delete_category(self):
         # Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         # Log in
         self.client.login(username='ah3200',password='password26')
@@ -218,10 +256,11 @@ class AdminTest(LiveServerTestCase):
     
     def test_create_story(self):
         # Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         self.client.login(username='ah3200',password='password26')
         
@@ -252,20 +291,22 @@ class AdminTest(LiveServerTestCase):
     
     def test_edit_story(self):
         # Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         # Create the author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
         
         # Create the site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         # Create the story
         story = Story()
@@ -307,20 +348,22 @@ class AdminTest(LiveServerTestCase):
         
     def test_delete_story(self):
         #Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         #Create the author
         author = User.objects.create_user('testuser','user@example','password')
         author.save()
         
         #Create the site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create the story
         story = Story()
@@ -360,26 +403,29 @@ class StoryViewTest(LiveServerTestCase):
         
     def test_index(self):
         #Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         #Create the tag
-        tag = Tag()
-        tag.name = 'perl'
-        tag.description = 'The Perl programming language'
-        tag.save()
+        tag = TagFactory(name='perl', description='The Perl programming language')
+        #tag = Tag()
+        #tag.name = 'perl'
+        #tag.description = 'The Perl programming language'
+        #tag.save()
         
         #Create author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
         
         #Create site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create Story
         story = Story()
@@ -428,26 +474,29 @@ class StoryViewTest(LiveServerTestCase):
         
     def test_post_page(self):
         #Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         #Create the tag
-        tag = Tag()
-        tag.name = 'perl'
-        tag.description = 'The Perl programming language'
-        tag.save()
+        tag = TagFactory(name='perl',description='The Perl programming language')
+        #tag = Tag()
+        #tag.name = 'perl'
+        #tag.description = 'The Perl programming language'
+        #tag.save()
         
         #Create author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
         
         #Create the site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create story
         story = Story()
@@ -489,18 +538,20 @@ class StoryViewTest(LiveServerTestCase):
         
     def test_category_page(self):
         #create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         author = User.objects.create_user('testuser','test@example.com','password')
         author.save()
         
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create story
         story = Story()
@@ -536,18 +587,20 @@ class StoryViewTest(LiveServerTestCase):
 
 def test_tag_page(self):
          #Create the tag
-        tag = Tag()
-        tag.name = 'perl'
-        tag.description = 'The Perl programming language'
-        tag.save()
+        tag = TagFactory(name='perl', description='The Perl programming language')
+        #tag = Tag()
+        #tag.name = 'perl'
+        #tag.description = 'The Perl programming language'
+        #tag.save()
         
         author = User.objects.create_user('testuser','test@example.com','password')
         author.save()
         
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create story
         story = Story()
@@ -614,26 +667,29 @@ class FlatPageViewTest(TestCase):
 class FeedTest(BaseAcceptanceTest):
     def test_all_story_feed(self):
         #Create the category
-        category = Category()
-        category.name = 'python'
-        category.description = 'The Python programming language'
-        category.save()
+        category = CategoryFactory()
+        #category = Category()
+        #category.name = 'python'
+        #category.description = 'The Python programming language'
+        #category.save()
         
         #Create the tag
-        tag = Tag()
-        tag.name = 'perl'
-        tag.description = 'The Perl programming language'
-        tag.save()
+        tag = TagFactory(name='perl', description='The Perl programming language')
+        #tag = Tag()
+        #tag.name = 'perl'
+        #tag.description = 'The Perl programming language'
+        #tag.save()
         
         #Create author
         author = User.objects.create_user('testuser','user@example.com','password')
         author.save()
         
         #Create the site
-        site = Site()
-        site.name = 'arnnop.com'
-        site.domain = 'arnnop.com'
-        site.save()
+        site = SiteFactory()
+        #site = Site()
+        #site.name = 'arnnop.com'
+        #site.domain = 'arnnop.com'
+        #site.save()
         
         #Create story
         story = Story()
