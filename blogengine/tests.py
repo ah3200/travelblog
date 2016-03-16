@@ -43,6 +43,35 @@ class TagFactory(factory.django.DjangoModelFactory):
     description = 'The Python programming language'
     slug = 'python'
 
+class AuthorFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+        django_get_or_create = (
+            'username',
+            'email',
+            'password',
+        )
+    username = 'testuser'
+    email = 'user@example.com'
+    password = 'password'
+
+class StoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Story
+        django_get_or_create = (
+            'title',
+            'text',
+            'slug',
+            'pub_date',
+        )
+    title = 'My first blog'
+    text = 'This is my first blog'
+    slug = 'my-first-story'
+    pub_date = timezone.now()
+    author = factory.SubFactory(AuthorFactory)
+    site = factory.SubFactory(SiteFactory)
+    category = factory.SubFactory(CategoryFactory)
+
 class BaseAcceptanceTest(LiveServerTestCase):
     def setUp(self):
         self.client = Client()
@@ -105,8 +134,9 @@ class StoryPostTest(TestCase):
         #category.save()
         
         #Create user/author
-        author = User.objects.create_user('testuser','user@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example.com','password')
+        #author.save()
         
         #Create Site
         site = SiteFactory()
@@ -116,19 +146,18 @@ class StoryPostTest(TestCase):
         #site.save()
         
         #Create new story
-        story = Story()
-        
+        story = StoryFactory()
+        #story = Story()
         #Add Story attributes
-        story.title = "My First Blog"
-        story.text = "This is my first blog"
-        story.slug = "my-first-story"
-        story.pub_date = timezone.now()
-        story.author = author
-        story.site = site
-        story.category = category
-        
+        #story.title = "My First Blog"
+        #story.text = "This is my first blog"
+        #story.slug = "my-first-story"
+        #story.pub_date = timezone.now()
+        #story.author = author
+        #story.site = site
+        #story.category = category
         #Save it
-        story.save()
+        #story.save()
         
         #add the tag
         story.tags.add(tag)
@@ -140,7 +169,7 @@ class StoryPostTest(TestCase):
         only_story = all_stories[0]
         self.assertEqual(only_story, story)
         
-        self.assertEqual(only_story.title, "My First Blog")
+        self.assertEqual(only_story.title, "My first blog")
         self.assertEqual(only_story.text, "This is my first blog")
         self.assertEqual(only_story.slug, "my-first-story")
         self.assertEqual(only_story.pub_date.day, story.pub_date.day)
@@ -298,8 +327,9 @@ class AdminTest(LiveServerTestCase):
         #category.save()
         
         # Create the author
-        author = User.objects.create_user('testuser','user@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example.com','password')
+        #author.save()
         
         # Create the site
         site = SiteFactory()
@@ -309,15 +339,16 @@ class AdminTest(LiveServerTestCase):
         #site.save()
         
         # Create the story
-        story = Story()
-        story.title = 'My first story'
-        story.text = 'This is my first blog story'
-        story.slug = 'my-first-story'
-        story.pub_date = timezone.now()
-        story.author = author
-        story.site = site
-        story.category = category
-        story.save()
+        story = StoryFactory()
+        #story = Story()
+        #story.title = 'My first story'
+        #story.text = 'This is my first blog story'
+        #story.slug = 'my-first-story'
+        #story.pub_date = timezone.now()
+        #story.author = author
+        #story.site = site
+        #story.category = category
+        #story.save()
         
         #Log in
         self.client.login(username='ah3200',password='password26')
@@ -355,8 +386,9 @@ class AdminTest(LiveServerTestCase):
         #category.save()
         
         #Create the author
-        author = User.objects.create_user('testuser','user@example','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example','password')
+        #author.save()
         
         #Create the site
         site = SiteFactory()
@@ -366,15 +398,16 @@ class AdminTest(LiveServerTestCase):
         #site.save()
         
         #Create the story
-        story = Story()
-        story.title = 'My first story'
-        story.text = 'This is my first blog story'
-        story.slug = 'my-first-story'
-        story.pub_date = timezone.now()
-        story.author = author
-        story.site = site
-        story.category = category
-        story.save()
+        story = StoryFactory()
+        #story = Story()
+        #story.title = 'My first story'
+        #story.text = 'This is my first blog story'
+        #story.slug = 'my-first-story'
+        #story.pub_date = timezone.now()
+        #story.author = author
+        #story.site = site
+        #story.category = category
+        #story.save()
         
         #Check new story saved
         all_stories = Story.objects.all()
@@ -417,8 +450,9 @@ class StoryViewTest(LiveServerTestCase):
         #tag.save()
         
         #Create author
-        author = User.objects.create_user('testuser','user@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example.com','password')
+        #author.save()
         
         #Create site
         site = SiteFactory()
@@ -428,16 +462,17 @@ class StoryViewTest(LiveServerTestCase):
         #site.save()
         
         #Create Story
-        story = Story()
-        story.title = "My very first blog post"
-        story.text = "This is [my first blog post](http://127.0.0.1:8000/)"
-        story.slug = "my-first-post"
-        story.pub_date = timezone.now()
-        story.author = author
-        story.site = site
-        story.category = category
+        story = StoryFactory(text="This is [my first blog post](http://127.0.0.1:8000/)")
+        #story = Story()
+        #story.title = "My very first blog post"
+        #story.text = "This is [my first blog post](http://127.0.0.1:8000/)"
+        #story.slug = "my-first-post"
+        #story.pub_date = timezone.now()
+        #story.author = author
+        #story.site = site
+        #story.category = category
         
-        story.save()
+        #story.save()
         
         #Add tag
         story.tags.add(tag)
@@ -488,8 +523,9 @@ class StoryViewTest(LiveServerTestCase):
         #tag.save()
         
         #Create author
-        author = User.objects.create_user('testuser','user@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example.com','password')
+        #author.save()
         
         #Create the site
         site = SiteFactory()
@@ -499,15 +535,17 @@ class StoryViewTest(LiveServerTestCase):
         #site.save()
         
         #Create story
-        story = Story()
-        story.title = "My first story"
-        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
-        story.pub_date = timezone.now()
-        story.slug = 'my-first-story'
-        story.author = author
-        story.site = site
-        story.category = category
-        story.save()
+        story = StoryFactory(text='This is [my first blog post](http://127.0.0.1:8000/)')
+        #story = Story()
+        #story.title = "My first story"
+        #story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        #story.pub_date = timezone.now()
+        #story.slug = 'my-first-story'
+        #story.author = author
+        #story.site = site
+        #story.category = category
+        #story.save()
+        
         story.tags.add(tag)
         story.save()
         
@@ -544,8 +582,9 @@ class StoryViewTest(LiveServerTestCase):
         #category.description = 'The Python programming language'
         #category.save()
         
-        author = User.objects.create_user('testuser','test@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','test@example.com','password')
+        #author.save()
         
         site = SiteFactory()
         #site = Site()
@@ -554,15 +593,16 @@ class StoryViewTest(LiveServerTestCase):
         #site.save()
         
         #Create story
-        story = Story()
-        story.title = "My first story"
-        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
-        story.pub_date = timezone.now()
-        story.slug = 'my-first-story'
-        story.author = author
-        story.site = site
-        story.category = category
-        story.save()
+        story = StoryFactory(text='This is [my first blog post](http://127.0.0.1:8000/)')
+        #story = Story()
+        #story.title = "My first story"
+        #story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        #story.pub_date = timezone.now()
+        #story.slug = 'my-first-story'
+        #story.author = author
+        #story.site = site
+        #story.category = category
+        #story.save()
         
         all_stories = Story.objects.all()
         self.assertEquals(len(all_stories),1)
@@ -593,8 +633,9 @@ def test_tag_page(self):
         #tag.description = 'The Perl programming language'
         #tag.save()
         
-        author = User.objects.create_user('testuser','test@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','test@example.com','password')
+        #author.save()
         
         site = SiteFactory
         #site = Site()
@@ -603,14 +644,16 @@ def test_tag_page(self):
         #site.save()
         
         #Create story
-        story = Story()
-        story.title = "My first story"
-        story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
-        story.pub_date = timezone.now()
-        story.slug = 'my-first-story'
-        story.author = author
-        story.site = site
-        story.save()
+        story = StoryFactory(text='This is [my first blog post](http://127.0.0.1:8000/)')
+        #story = Story()
+        #story.title = "My first story"
+        #story.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
+        #story.pub_date = timezone.now()
+        #story.slug = 'my-first-story'
+        #story.author = author
+        #story.site = site
+        #story.save()
+        
         story.tags.add(tag)
         story.save()
         
@@ -681,8 +724,9 @@ class FeedTest(BaseAcceptanceTest):
         #tag.save()
         
         #Create author
-        author = User.objects.create_user('testuser','user@example.com','password')
-        author.save()
+        author = AuthorFactory()
+        #author = User.objects.create_user('testuser','user@example.com','password')
+        #author.save()
         
         #Create the site
         site = SiteFactory()
@@ -692,15 +736,16 @@ class FeedTest(BaseAcceptanceTest):
         #site.save()
         
         #Create story
-        story = Story()
-        story.title = "My first story"
-        story.text = 'This is my *first* blog post'
-        story.pub_date = timezone.now()
-        story.slug = 'my-first-story'
-        story.author = author
-        story.site = site
-        story.category = category
-        story.save()
+        story = StoryFactory(text='This is my *first* blog post')
+        #story = Story()
+        #story.title = "My first story"
+        #story.text = 'This is my *first* blog post'
+        #story.pub_date = timezone.now()
+        #story.slug = 'my-first-story'
+        #story.author = author
+        #story.site = site
+        #story.category = category
+        #story.save()
         story.tags.add(tag)
         story.save()
         
