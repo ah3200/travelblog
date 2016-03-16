@@ -686,6 +686,9 @@ def test_tag_page(self):
         self.assertTrue(story.pub_date.strftime('%b') in response.content)
         self.assertTrue(str(story.pub_date.day) in response.content)
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/tag_story_list.html')
 
 class FlatPageViewTest(TestCase):
     def test_create_flat_page(self):
@@ -803,3 +806,35 @@ class FeedTest(BaseAcceptanceTest):
     
         # Check other post is not in this feed
         self.assertTrue('This is my <em>second</em> blog post' not in response.content)
+        
+    def test_tag_feed(self):
+        # Create a story
+        story = StoryFactory(text='This is my *first* blog post')
+        tag = TagFactory()
+        story.tags.add(tag)
+        story.save()
+        
+        # Create another story with different tag
+        tag2 = TagFactory(name='perl', description='The Perl programming language', slug='perl')
+        story2 = StoryFactory(text='This is my *second* blog post', title='My second post', slug='my-second-post')
+        story2.tags.add(tag2)
+        story2.save()
+        
+        # Fetch the feed
+        response = self.client.get("/feeds/stories/tag/python")
+        self.assertEquals(response.status_code,200)
+        
+         # Parse the feed
+        feed = feedparser.parse(response.content)
+        
+        #Check length 
+        self.assertEquals(len(feed.entries),1)
+        
+        # Check story retrieve is the correct one
+        story_feed = feed.entries[0]
+        self.assertEquals(story_feed.title, story.title)
+        self.assertTrue('This is my <em>first</em> blog post' in story_feed.description)
+    
+        # Check other post is not in this feed
+        self.assertTrue('This is my <em>second</em> blog post' not in response.content)
+        

@@ -1,0 +1,42 @@
+{% extends "blogengine/includes/base.html" %}
+
+    {% load custom_markdown %}
+
+    {% block content %}
+        {% if object_list %}
+            {% for story in object_list %}
+            <div class="story col-md-12">
+                <h1><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h1>
+                <h3>{{ story.pub_date }}</h3>
+                {{ story.text|custom_markdown }}
+            </div>
+            {% if story.category %}
+                <div class="col-md-12">
+                    <a href="{{story.category.get_absolute_url}}"><span class="label label-primary">{{story.category.name}}</span></a>
+                </div>
+            {% endif %}
+            {% if story.tags %}
+                <div class="col-md-12">
+                {% for tag in story.tags.all %}
+                    <a href="{{ tag.get_absolute_url }}"><span class="label label-success">{{ tag.name }}</span></a>
+                {% endfor %}
+                </div>
+            {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>Not story found</p>
+        {% endif %}
+               
+        <ul class="pager">
+        {% if page_obj.has_previous %}
+        <li class="previous"><a href="{{ page_obj.previous_page_number }}">Previous Page</a></li>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <li class="next"><a href="{{ page_obj.next_page_number }}">Next Page</a></li>
+        {% endif %}
+        </ul>
+        
+        <a href="/feeds/stories/tag/{{ tag.slug }}/">RSS feed for tag {{ tag.name }}</a>
+       
+    {% endblock %}

@@ -36,7 +36,16 @@ class TagListView(ListView):
             return tag.post_set.all()
         except:
             return Story.objects.none()
-            
+    
+    def get_context_data(self, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        try:
+            context['tag'] = Tag.objects.get(slug=slug)
+        except Tag.DoesNotExist:
+            context['tag'] = None
+        return context
+        
 class StoriesFeed(Feed):
     title = "RSS Feed - stories"
     link = "feeds/stories/"
@@ -68,3 +77,24 @@ class CategoryStoriesFeed(StoriesFeed):
         
     def items(self, obj):
         return Story.objects.filter(category=obj).order_by('-pub_date')
+        
+class TagStoriesFeed(StoriesFeed):
+    def get_object(self, request, slug):
+        return get_object_or_404(Tag, slug=slug)
+        
+    def title(self, obj):
+        return "RSS feed - stories with tagged %s" % obj.name
+        
+    def link(self, obj):
+        return obj.get_absolute_url()
+        
+    def description(self, obj):
+        return "RSS feed - stories with tagged %s" % obj.name
+        
+    def items(self, obj):
+        try:
+            tag = Tag.objects.get(slug=obj.slug)
+            return tag.story_set.all()
+        except Tag.DoesNotExist:
+            return Story.objects.none()
+ 
