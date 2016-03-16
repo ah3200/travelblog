@@ -33,7 +33,7 @@ class TagListView(ListView):
         slug = self.kwargs['slug']
         try:
             tag = Tag.objects.get(slug=slug)
-            return tag.post_set.all()
+            return tag.story_set.all()
         except:
             return Story.objects.none()
     
