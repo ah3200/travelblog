@@ -556,10 +556,10 @@ class StoryViewTest(LiveServerTestCase):
         self.assertEquals(len(all_stories),1)
         only_story = all_stories[0]
         self.assertEquals(only_story, story)
-        print only_story.slug
+        #print only_story.slug
         
         story_url = '/story/'+only_story.get_absolute_url()
-        print story_url
+       #print story_url
         response = self.client.get(story_url)
         self.assertEquals(response.status_code, 200)
         
@@ -866,3 +866,36 @@ class SearchViewTest(BaseAcceptanceTest):
         
         # Check the second post is in the result
         self.assertTrue('My second post' in response.content)
+        
+class StoryWriteViewTest(BaseAcceptanceTest):
+    
+    def test_write_story(self):
+        # Create Category
+        category = CategoryFactory()
+        
+        all_category = Category.objects.all()
+        print all_category[0].id
+        self.assertEquals(len(all_category),1)
+        
+        # Create test User
+        User.objects.create_user('testuser', 'test@example.com', 'password1')
+        
+        login = self.client.login(username='testuser',password='password1')
+        self.assertTrue(login) 
+        
+        response = self.client.post('/story/new/', {
+                    'title':'Travel to Iceland', 
+                    'text':'This is my story to Iceland',
+                    'slug':'travel-to-iceland',
+                    'category': 'python'
+                    })
+                    
+        self.assertEqual(response.status_code, 200)
+        #self.assertRedirects(response,'/story/',status_code=302,target_status_code=200)
+        # Check new story in database
+        #all_stories = Story.objects.all()
+        #self.assertEquals(len(all_stories),1)
+        
+        #self.assertTrue('Travel to Iceland' in response.content)
+        #self.assertTrue('This is my story to Iceland' in response.content)
+        

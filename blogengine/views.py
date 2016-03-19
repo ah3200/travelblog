@@ -1,11 +1,14 @@
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404, redirect
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
 from django.views.generic import ListView
 from django.contrib.syndication.views import Feed
 from blogengine.models import Category, Story, Tag
+from blogengine.forms import StoryForm
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
+from django.utils import timezone
 import markdown2
 
 # Create your views here.
@@ -126,4 +129,41 @@ def getSearchResults(request):
                               'object_list': returned_page.object_list,
                               'search': query})
                                
+def createNewStory(request):
     
+    if request.method == 'POST':
+        print request.POST['title']
+        print request.POST['text']
+        print request.POST['slug']
+        print request.POST['category']
+        
+        # create a form instance and populate it with data from the request:
+        form = StoryForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            storypost = form.save(commit=False)
+            storypost.pub_date = timezone.now()
+            storypost.site = get_current_site(request)
+            storypost.author = request.user
+            storypost.save()
+            
+#        current_user = request.user
+#        new_title = request.POST['title']
+#        new_text = request.POST['text']
+#        new_pub_date = timezone.now()
+#        new_slug = request.POST['slug']
+#        new_category = Category.objects.get(name=request.POST['category'])
+#        current_site = get_current_site(request)
+#        new_story = Story.objects.create(title=new_title, 
+#                                         text=new_text, 
+#                                         pub_date=new_pub_date, 
+#                                         slug=new_slug, 
+#                                         category=new_category,
+#                                         author=current_user,
+#                                         site=current_site)
+            return redirect('/story/')
+            #,{'object_list':[storypost]})
+        
+    return render(request,'blogengine/new_story.html',{'form':StoryForm()})
+#    return render_to_response('blogengine/story_list.html',{'object_list':[new_story]})
+        

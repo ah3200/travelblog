@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.text import slugify
 
+
 # Create your models here
 class Category(models.Model):
     name = models.CharField(max_length=200)

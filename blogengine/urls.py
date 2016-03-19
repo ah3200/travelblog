@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^feeds/stories/tag/(?P<slug>[a-zA-Z0-9-]+)/?$', TagStoriesFeed()),
     # Search stories
     url(r'^search', views.getSearchResults),
+    url(r'^story/new/$', views.createNewStory),
     ]
