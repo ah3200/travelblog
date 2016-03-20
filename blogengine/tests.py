@@ -1,6 +1,7 @@
 from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
 from blogengine.models import Story, Category, Tag
+from blogengine.forms import StoryForm, EMPTY_ITEM_ERROR
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
@@ -866,16 +867,37 @@ class SearchViewTest(BaseAcceptanceTest):
         
         # Check the second post is in the result
         self.assertTrue('My second post' in response.content)
-        
+
+class HomePageTest(TestCase):
+    def test_home_page_renders_home_template(self):
+        response = self.client.get('/story/new/')
+        self.assertTemplateUsed(response, 'blogengine/new_story.html')
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/story/new/')
+        self.assertIsInstance(response.context['form'], StoryForm)
+
 class StoryWriteViewTest(BaseAcceptanceTest):
+    def test_story_form(self):
+        form = StoryForm()
+        self.assertIn('placeholder="Enter a to-do item"', form.as_p())
+        self.assertIn('class="form-control input-lg"', form.as_p())
+    
+    def test_form_validation_for_blank_items(self):
+        form = StoryForm(data={'text': '','category':1})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors['text'],
+            [EMPTY_ITEM_ERROR]
+        )
     
     def test_write_story(self):
         # Create Category
         category = CategoryFactory()
         
         all_category = Category.objects.all()
-        print all_category[0].id
         self.assertEquals(len(all_category),1)
+        #self.assertEqual(all_category[0].id,'1')
         
         # Create test User
         User.objects.create_user('testuser', 'test@example.com', 'password1')
@@ -887,15 +909,33 @@ class StoryWriteViewTest(BaseAcceptanceTest):
                     'title':'Travel to Iceland', 
                     'text':'This is my story to Iceland',
                     'slug':'travel-to-iceland',
-                    'category': 'python'
+                    'category': all_category[0].id
                     })
                     
-        self.assertEqual(response.status_code, 200)
-        #self.assertRedirects(response,'/story/',status_code=302,target_status_code=200)
-        # Check new story in database
-        #all_stories = Story.objects.all()
-        #self.assertEquals(len(all_stories),1)
+        self.assertEqual(Story.objects.count(), 1)
+        new_item = Story.objects.first()
+        self.assertEqual(new_item.text, 'This is my story to Iceland')
+    
+    def notest_write_story_redirect_after_post(self):
+        # Create Category
+        category = CategoryFactory()
         
-        #self.assertTrue('Travel to Iceland' in response.content)
-        #self.assertTrue('This is my story to Iceland' in response.content)
+        all_category = Category.objects.all()
+        self.assertEquals(len(all_category),1)
+        #self.assertEqual(all_category[0].id,'1')
+        
+        # Create test User
+        User.objects.create_user('testuser', 'test@example.com', 'password1')
+        
+        login = self.client.login(username='testuser',password='password1')
+        self.assertTrue(login) 
+        
+        response = self.client.post('/story/new/', {
+                    'title':'Travel to Iceland', 
+                    'text':'This is my story to Iceland',
+                    'slug':'travel-to-iceland',
+                    'category': all_category[0].id
+                    })
+        #self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/story/')
         

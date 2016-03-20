@@ -132,38 +132,18 @@ def getSearchResults(request):
 def createNewStory(request):
     
     if request.method == 'POST':
-        print request.POST['title']
-        print request.POST['text']
-        print request.POST['slug']
-        print request.POST['category']
-        
         # create a form instance and populate it with data from the request:
         form = StoryForm(request.POST)
-        # check whether it's valid:
+            # check whether it's valid:
         if form.is_valid():
             storypost = form.save(commit=False)
             storypost.pub_date = timezone.now()
             storypost.site = get_current_site(request)
             storypost.author = request.user
             storypost.save()
-            
-#        current_user = request.user
-#        new_title = request.POST['title']
-#        new_text = request.POST['text']
-#        new_pub_date = timezone.now()
-#        new_slug = request.POST['slug']
-#        new_category = Category.objects.get(name=request.POST['category'])
-#        current_site = get_current_site(request)
-#        new_story = Story.objects.create(title=new_title, 
-#                                         text=new_text, 
-#                                         pub_date=new_pub_date, 
-#                                         slug=new_slug, 
-#                                         category=new_category,
-#                                         author=current_user,
-#                                         site=current_site)
+    
             return redirect('/story/')
             #,{'object_list':[storypost]})
-        
     return render(request,'blogengine/new_story.html',{'form':StoryForm()})
 #    return render_to_response('blogengine/story_list.html',{'object_list':[new_story]})
         
