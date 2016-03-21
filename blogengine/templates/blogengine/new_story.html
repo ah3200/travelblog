@@ -4,8 +4,7 @@
 
     {% block content %}
         <form action="/story/new/" method="post">{% csrf_token %}
-            {{ form.as_ul }}
+            {{ form.as_ul|safe }}
             <input type="submit" value="Submit" />
         </form>
-        {{ form.media }}
     {% endblock %}

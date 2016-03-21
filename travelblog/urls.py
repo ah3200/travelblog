@@ -21,6 +21,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('blogengine.urls')),
-    url(r'',include('django.contrib.flatpages.urls')),
+#    url(r'',include('django.contrib.flatpages.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
+    url(r'^summernote/', include('django_summernote.urls')),
 ]
