@@ -10,7 +10,7 @@ class StoryForm(forms.ModelForm):
         widgets = {
             'text': forms.fields.TextInput(attrs={
                 'placeholder': 'Enter your story here',
-#                'class': 'form-control input-lg',
+                'class': 'form-control input-lg',
             }),
         }
         error_messages = {

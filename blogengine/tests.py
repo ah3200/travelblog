@@ -880,7 +880,7 @@ class HomePageTest(TestCase):
 class StoryWriteViewTest(BaseAcceptanceTest):
     def test_story_form(self):
         form = StoryForm()
-        self.assertIn('placeholder="Enter a to-do item"', form.as_p())
+        self.assertIn('Enter your story here', form.as_p())
         self.assertIn('class="form-control input-lg"', form.as_p())
     
     def test_form_validation_for_blank_items(self):
