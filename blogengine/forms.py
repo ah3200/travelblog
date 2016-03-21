@@ -9,8 +9,8 @@ class StoryForm(forms.ModelForm):
         fields = ('title', 'text', 'slug', 'category',)
         widgets = {
             'text': forms.fields.TextInput(attrs={
-                'placeholder': 'Enter a to-do item',
-                'class': 'form-control input-lg',
+                'placeholder': 'Enter your story here',
+#                'class': 'form-control input-lg',
             }),
         }
         error_messages = {
