@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.syndication',
-    'simplemde',
     'django_summernote',
 ]
 
@@ -144,5 +143,5 @@ SITE_ID = 1
 
 SUMMERNOTE_CONFIG = {
     'iframe':False,
-    'airMode':True,
+    'airMode':False,
     }
