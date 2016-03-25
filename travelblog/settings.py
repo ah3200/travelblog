@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.syndication',
     'django_summernote',
+    'authentication',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -145,3 +146,5 @@ SUMMERNOTE_CONFIG = {
     'iframe':False,
     'airMode':False,
     }
+    
+AUTH_USER_MODEL = 'authentication.Account'

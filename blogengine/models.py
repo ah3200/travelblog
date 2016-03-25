@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from authentication.models import Account
 from django.contrib.sites.models import Site
 from django.utils.text import slugify
 from simplemde.fields import SimpleMDEField
@@ -48,7 +49,7 @@ class Story(models.Model):
     text = SimpleMDEField()
 #    text = models.TextField()
     slug = models.SlugField(max_length=40,unique=True)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(Account)
     site = models.ForeignKey(Site)
     category = models.ForeignKey(Category,blank=True)
     tags = models.ManyToManyField(Tag)
