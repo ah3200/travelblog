@@ -5,3 +5,4 @@ reports/
 htmlcov/
 blogengine/static/bower_components/
 static
+django-summernote/
