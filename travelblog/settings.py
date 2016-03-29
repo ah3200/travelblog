@@ -145,6 +145,12 @@ SITE_ID = 1
 SUMMERNOTE_CONFIG = {
     'iframe':False,
     'airMode':False,
+    'toolbar': [
+        ['style', ['style']],
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['para', ['ul', 'ol', 'height']],
+        ['insert', ['link']],
+    ],
     }
     
-AUTH_USER_MODEL = 'authentication.Account'
+#AUTH_USER_MODEL = 'authentication.Account'

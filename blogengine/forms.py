@@ -9,7 +9,7 @@ class StoryForm(forms.ModelForm):
         model = Story
         fields = ('title', 'text', 'slug', 'category',)
         widgets = {
-            'text': SummernoteWidget(),
+            'text': SummernoteInplaceWidget()
         }
 #        widgets = {
 #            'text': forms.fields.TextInput(attrs={

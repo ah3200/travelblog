@@ -7,7 +7,7 @@
         <div class="story">
             <h1>{{ object.title }}</h1>
             <h3>{{ object.pub_date }}</h3>
-            {{ object.text|custom_markdown }}
+            {{ object.text|safe }}
             <a href="{{object.category.get_absolute_url}}"><span class="label label-primary">{{object.category.name}}</span></a>
             {% for tag in story.tags.all %}
                 <a href="{{ tag.get_absolute_url }}"><span class="label label-success">{{ tag.name }}</span></a>

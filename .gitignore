@@ -4,5 +4,5 @@ db.sqlite3
 reports/
 htmlcov/
 blogengine/static/bower_components/
-static
+static/
 django-summernote/
