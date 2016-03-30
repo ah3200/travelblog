@@ -163,4 +163,13 @@ AUTHENTICATION_BACKENDS = (
    'social.backends.instagram.InstagramOAuth2',
    'django.contrib.auth.backends.ModelBackend',
 )
+
+import json
+with open('secret.json') as f:
+    SECRETS = json.load(f)
+secret = lambda n: str(SECRETS[n])
+
+SOCIAL_AUTH_FACEBOOK_KEY = secret('FACEBOOK_API_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = secret('FACEBOOK_API_SECRET')
+
 #AUTH_USER_MODEL = 'authentication.Account'

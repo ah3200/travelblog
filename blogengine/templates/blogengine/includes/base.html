@@ -44,23 +44,52 @@
                         {% endfor %}
                         <li><a href="/feeds/stories/">RSS feed</a></li>
                         <li><a href="/story/new/">Write a Story</a></li>
-                        
+                       
                         <form action="/search" method="GET" class="navbar-form navbar-left">
                             <div class="form-group">
                                 <input type="text" name="q" placeholder="Search..." class="form-control"></input>
                             </div>
                             <button type="submit" class="btn btn-default">Search</button>
                         </form>
+                        
+                        
+                        {% if user and not user.is_anonymous %}
+                         <li>
+                           <a>Hello {{ user.get_full_name|default:user.username }}!</a>
+                         </li>
+                         <li>
+                           <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
+                         </li>
+                        {% else %}
+                         <li>
+                           <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
+                         </li>
+                         <li>
+                           <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+                         </li>
+                         <li>
+                           <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">Login with Twitter</a>
+                         </li>
+                        {% endif %}
+                        
                     </ul>
                 </div>
             </div>
         </div>
         
         <div class="container">
+            
             {% block header %}
                 <div class="page-header">
                     <h1>My Django Blog</h1>
                 </div>
+
+                <div class="fb-like"
+                    data-share="true"
+                    data-width="450"
+                    data-show-faces="true">
+                </div>
+
             {% endblock %}
             <div class="row">
                 {% block content %}{% endblock %}
