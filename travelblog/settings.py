@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.syndication',
     'django_summernote',
+    'social.apps.django_app.default',
     'authentication',
 ]
 
@@ -70,6 +71,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -152,5 +155,12 @@ SUMMERNOTE_CONFIG = {
         ['insert', ['link']],
     ],
     }
-    
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.facebook.FacebookOAuth2',
+   'social.backends.google.GoogleOAuth2',
+   'social.backends.twitter.TwitterOAuth',
+   'social.backends.instagram.InstagramOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
+)
 #AUTH_USER_MODEL = 'authentication.Account'

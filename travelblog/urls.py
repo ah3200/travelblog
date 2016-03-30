@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^api/v1/', include(router.urls)),
     url(r'^api/v1/auth/login/$', LoginView.as_view(), name='login'),
+    url('', include('social.apps.django_app.urls', namespace='social'))
 #    url('^.*$', IndexView.as_view(), name='index'),
 ]
