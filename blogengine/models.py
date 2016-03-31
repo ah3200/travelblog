@@ -51,7 +51,7 @@ class Story(models.Model):
     slug = models.SlugField(max_length=40,unique=True)
     author = models.ForeignKey(User)
     site = models.ForeignKey(Site)
-    category = models.ForeignKey(Category,blank=True)
+    category = models.ForeignKey(Category,blank=True,null=True)
     tags = models.ManyToManyField(Tag)
 
     def get_absolute_url(self):
