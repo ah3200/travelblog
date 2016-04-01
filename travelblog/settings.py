@@ -146,7 +146,7 @@ PROJECT_APPS = ['blogengine']
 SITE_ID = 1
 
 SUMMERNOTE_CONFIG = {
-    'iframe':False,
+    'iframe':True,
     'airMode':False,
     'toolbar': [
         ['style', ['style']],
