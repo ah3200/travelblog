@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'social.apps.django_app.default',
     'authentication',
+    'taggit',
 ]
 
 MIDDLEWARE_CLASSES = [

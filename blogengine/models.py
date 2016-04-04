@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.text import slugify
 from simplemde.fields import SimpleMDEField
+from taggit.managers import TaggableManager
 
 # Create your models here
 class Category(models.Model):
@@ -52,7 +53,8 @@ class Story(models.Model):
     author = models.ForeignKey(User)
     site = models.ForeignKey(Site)
     category = models.ForeignKey(Category,blank=True,null=True)
-    tags = models.ManyToManyField(Tag)
+    tags = TaggableManager()
+#    tags = models.ManyToManyField(Tag)
 
     def get_absolute_url(self):
         return "%s/%s/%s/" % (self.pub_date.year, self.pub_date.month, self.slug)

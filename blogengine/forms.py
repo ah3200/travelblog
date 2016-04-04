@@ -22,3 +22,4 @@ class StoryForm(forms.ModelForm):
 #        }
     #title = forms.CharField(label='Title', max_length=200)
     #text = forms.CharField(widget=forms.Textarea, label='Story')
+    
