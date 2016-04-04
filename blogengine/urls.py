@@ -10,7 +10,7 @@ urlpatterns = [
         model=Story,
         )),
     url(r'^category/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', CategoryListView.as_view(model=Category, paginate_by=2)),
-    url(r'^tag/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', TagListView.as_view(model=Tag, paginate_by=2)),
+    url(r'^tag/(?P<slug>[a-zA-Z0-9-]+)/(?P<page>\d+)?/?$', TagListView.as_view(model=Tag, paginate_by=2), name='tag-view'),
     # Post RSS feed
     url(r'^feeds/stories/$', StoriesFeed()),
     # Category RSS feed

@@ -10,7 +10,7 @@
             {{ object.text|safe }}
             <a href="{{object.category.get_absolute_url}}"><span class="label label-primary">{{object.category.name}}</span></a>
             {% for tag in story.tags.all %}
-                <a href="{{ tag.get_absolute_url }}"><span class="label label-success">{{ tag.name }}</span></a>
+                <a href="{% url 'tag-view' tag.slug %}"><span class="label label-success">{{ tag.name }}</span></a>
             {% endfor %}
         </div>
 
