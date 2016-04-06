@@ -124,12 +124,10 @@
                 </div>
             </div>
         </div> -->
-        
         <div class="container">
-            
             {% block header %}
                 <div class="page-header">
-                    <h1>Above sea level</h1>
+                    <h3>Above sea level</h3>
                 </div>
 
                 <div class="fb-like"
@@ -140,7 +138,30 @@
 
             {% endblock %}
             <div class="row">
+                <div class="col s12 m9 l9">
                 {% block content %}{% endblock %}
+                </div>
+                <!-- Right Side Bar -->
+                <div class="col hide-on-small-only m3 l3">
+                <div class="toc-wrapper">
+                  <div style="height: 1px;">
+                    <ul class="section table-of-contents blue-grey lighten-5">
+                      <li><a href="#grid-container"><i class="small material-icons">directions_bus</i><span>Bus</span></a></li>
+                      <li><a href="#grid-intro"><i class="small material-icons">directions_bike</i><span>Bike</span></a></li>
+                      <li><a href="#grid-offsets"><i class="small material-icons">flight</i><span>Plane</span></a></li>
+                      <li><a href="#grid-push"><i class="small material-icons">drive_eta</i><span>Car</span></a></li>
+                      <div class="divider"></div>
+                      <li><a href="#grid-layouts"><i class="small material-icons">wb_sunny</i>Nature</a></li>
+                      <li><a href="#grid-responsive"><i class="small material-icons">photo_camera</i>Sightseeing</a></li>
+                      <div class="divider"></div>
+                      <li><div class="chip">Asia<i class="material-icons">close</i></div></li>
+                      <li><div class="chip">Hiking<i class="material-icons">close</i></div></li>
+                      <li><div class="chip">Nature<i class="material-icons">close</i></div></li>
+                      <li><div class="chip">Sunset<i class="material-icons">close</i></div></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
         

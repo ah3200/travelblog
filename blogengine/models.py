@@ -51,6 +51,7 @@ class Story(models.Model):
 #    text = models.TextField()
     slug = models.SlugField(max_length=40,unique=True)
     author = models.ForeignKey(User)
+    coverphoto = models.ImageField(upload_to='coverphoto/',default = 'coverphoto/None/no-img.jpg')
     site = models.ForeignKey(Site)
     category = models.ForeignKey(Category,blank=True,null=True)
     tags = TaggableManager()

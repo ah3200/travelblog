@@ -7,7 +7,7 @@ EMPTY_ITEM_ERROR = "You can't have an empty list item"
 class StoryForm(forms.ModelForm):
     class Meta:
         model = Story
-        fields = ('title', 'text', 'tags',)
+        fields = ('title', 'coverphoto', 'text', 'slug', 'tags',)
         widgets = {
             'text': SummernoteWidget()
         }
