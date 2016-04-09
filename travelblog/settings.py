@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',
     'authentication',
     'taggit',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [

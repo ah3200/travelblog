@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.generic import ListView, DetailView
 from blogengine.models import Story, Category, Tag
 from blogengine.views import CategoryListView, TagListView, StoriesFeed, CategoryStoriesFeed, TagStoriesFeed
@@ -20,4 +20,5 @@ urlpatterns = [
     # Search stories
     url(r'^search', views.getSearchResults),
     url(r'^story/new/$', views.createNewStory),
+    url(r'^api/', include('api.urls')),
     ]
