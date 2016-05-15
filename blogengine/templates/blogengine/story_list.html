@@ -4,21 +4,22 @@
 
     {% block content %}
         {% for story in object_list %}
-        <div class="col s12 m6">
-            <div class="icon-block">
-                <img class="responsive-img" src="{{story.coverphoto.url}}">
+        <div class="row display-list">
+            <div class="col s12 m6">
+                <div class="icon-block">
+                    <img class="responsive-img" src="{{story.coverphoto.url}}">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <h5 class="blue-grey-text text-darken-4"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h5>
+                <h6 class="blue-grey-text text-lighten-3">{{ story.pub_date }}</h6>
+                <p class="light">{{ story.text|safe }}</p>
+                <a href="{{story.category.get_absolute_url}}"><span class="label label-primary">{{story.category.name}}</span></a>
+                {% for tag in story.tags.all %}
+                <a href="{% url 'tag-view' tag.slug %}"><span class="label label-success">{{ tag.name }}</span></a>
+                {% endfor %}
             </div>
         </div>
-        <div class="col s12 m6">
-            <h5 class="blue-grey-text text-darken-4"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h5>
-            <h6 class="blue-grey-text text-lighten-3">{{ story.pub_date }}</h6>
-            <p class="light">{{ story.text|safe }}</p>
-            <a href="{{story.category.get_absolute_url}}"><span class="label label-primary">{{story.category.name}}</span></a>
-            {% for tag in story.tags.all %}
-            <a href="{% url 'tag-view' tag.slug %}"><span class="label label-success">{{ tag.name }}</span></a>
-            {% endfor %}
-        </div>
-        
         {% endfor %}
         
         <ul class="pager">
